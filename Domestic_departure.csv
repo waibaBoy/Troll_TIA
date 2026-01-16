@@ -1,0 +1,10 @@
+Airlines,SCHEDULED TIME OF Departure,Actual Time of Departure,Flight,Destination,Status
+Yeti Airlines,15:40:0,18:45:0,NYT877,Bhairahawa,----
+Yeti Airlines,16:0:0,18:50:0,NYT787,Biratnagar,Boarding
+Buddha Air,16:30:0,18:0:0,BHA559,Simara Airport,Boarding
+Yeti Airlines,17:20:0,17:20:0,NYT687D/S,Pokhara,----
+Shree Airlines,17:35:0,17:35:0,SHA229,Dhangadhi,----
+Buddha Air,18:5:0,18:25:0,BHA713,Biratnagar,Departed
+Shree Airlines,18:35:0,18:35:0,SHA439,Nepalgunj,----
+Buddha Air,19:0:0,19:0:0,BHA667,Pokhara,----
+Yeti Airlines,19:25:0,19:25:0,NYT689,Pokhara,----

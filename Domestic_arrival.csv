@@ -1,0 +1,21 @@
+Airlines,Scheduled Time of Arrival,Estimated Time of Arrival,Flight,Origin,Status
+Shree Airlines,16:25:0,18:40:0,SHA226,Dhangadhi,----
+Yeti Airlines,16:45:0,18:48:0,NYT574,Janakpur,Landed
+Buddha Air,17:0:0,18:26:0,BHA710,Biratnagar,Landed
+Yeti Airlines,17:10:0,18:40:0,NYT684,Pokhara,----
+Yeti Airlines,17:10:0,17:10:0,NYT878,Bhairahawa,----
+Buddha Air,17:20:0,18:55:0,BHA254,Dhangadhi,----
+Buddha Air,17:20:0,17:20:0,BHA560,Simara Airport,----
+Yeti Airlines,17:35:0,19:30:0,NYT926,Bhadrapur,----
+Buddha Air,17:40:0,18:50:0,BHA662,Pokhara,----
+Yeti Airlines,17:50:0,17:50:0,NYT788,Biratnagar,----
+Shree Airlines,17:55:0,19:30:0,SHA228,Dhangadhi,----
+Buddha Air,18:0:0,18:30:0,BHA960,Bhadrapur,----
+Buddha Air,18:10:0,19:30:0,BHA806,Bhairahawa,----
+Buddha Air,18:15:0,19:30:0,BHA510,Janakpur,----
+Shree Airlines,18:15:0,18:15:0,SHA438,Nepalgunj,----
+Buddha Air,18:20:0,19:35:0,BHA408,Nepalgunj,----
+Shree Airlines,18:25:0,18:25:0,SHA660,Pokhara,----
+Yeti Airlines,18:40:0,18:40:0,NYT688D/S,Pokhara,----
+Shree Airlines,19:5:0,19:5:0,SHA740,Biratnagar,----
+Buddha Air,20:0:0,20:15:0,BHA714,Biratnagar,----
