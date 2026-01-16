@@ -2,7 +2,6 @@ import argparse
 import csv
 import os
 import re
-import shutil
 import time
 from pathlib import Path
 
@@ -35,9 +34,6 @@ TAB_FILENAMES = {
 
 
 def handle_verification(driver, timeout: int = 30):
-    """
-    Automatically handle Cloudflare or similar verification checkbox.
-    """
     print("Checking for verification challenges...")
     
     end_time = time.time() + timeout
@@ -101,7 +97,6 @@ def handle_verification(driver, timeout: int = 30):
                                 print(f"Trying iframe: {iframe.get_attribute('src') or iframe.get_attribute('id')}")
                                 driver.switch_to.frame(iframe)
                                 
-                                # Look for the checkbox
                                 checkbox_selectors = [
                                     "input[type='checkbox']",
                                     ".cb-lb",
@@ -117,14 +112,13 @@ def handle_verification(driver, timeout: int = 30):
                                         )
                                         if checkbox.is_displayed():
                                             print(f"Found checkbox with selector: {cb_selector}")
-                                            # Try clicking
                                             try:
                                                 checkbox.click()
                                             except:
                                                 driver.execute_script("arguments[0].click();", checkbox)
                                             print("Clicked verification checkbox!")
                                             driver.switch_to.default_content()
-                                            time.sleep(3)  # Wait for verification to complete
+                                            time.sleep(3)
                                             return True
                                     except:
                                         continue
@@ -234,11 +228,6 @@ def write_csv(headers, rows, output_path: Path):
 
 
 def create_driver(headless: bool):
-    """
-    Create Chrome driver with anti-detection measures.
-    First tries undetected-chromedriver, falls back to standard selenium.
-    """
-    # Try undetected-chromedriver first (best for Cloudflare bypass)
     try:
         import undetected_chromedriver as uc
         print("Using undetected-chromedriver for better Cloudflare bypass...")
@@ -255,8 +244,7 @@ def create_driver(headless: bool):
         print("Install it with: pip install undetected-chromedriver")
     except Exception as e:
         print(f"undetected-chromedriver failed: {e}, falling back to selenium")
-    
-    # Fallback to standard selenium with anti-detection
+
     options = Options()
     if headless:
         options.add_argument("--headless=new")
@@ -264,7 +252,6 @@ def create_driver(headless: bool):
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    # Help bypass bot detection
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option("useAutomationExtension", False)
@@ -318,7 +305,6 @@ def create_driver(headless: bool):
 
 
 def find_tab(driver, label: str):
-    """Find tab by looking for <a> tags with matching text or href"""
     try:
         xpath = f"//a[normalize-space(.)='{label}']"
         candidates = driver.find_elements(By.XPATH, xpath)
@@ -348,7 +334,6 @@ def find_tab(driver, label: str):
     except:
         pass
     
-    # Fallback to partial text match
     try:
         xpath = f"//a[contains(normalize-space(.), '{label}')]"
         candidates = driver.find_elements(By.XPATH, xpath)
@@ -362,7 +347,6 @@ def find_tab(driver, label: str):
 
 
 def resolve_panel_selector(tab):
-    """Get the panel ID from tab attributes (href/data-target/aria-controls)."""
     target = (
         tab.get_attribute("data-bs-target")
         or tab.get_attribute("data-target")
@@ -376,7 +360,6 @@ def resolve_panel_selector(tab):
     if not target or target.startswith("javascript:"):
         return None
 
-    # If href is a full URL, extract only the fragment.
     if "#" in target:
         fragment = target.split("#", 1)[1].strip()
         return f"#{fragment}" if fragment else None
@@ -402,7 +385,6 @@ def find_panel(driver, selector: str | None):
 
 
 def wait_for_table(driver, panel_selector: str | None, timeout: int):
-    """Wait for table to load, with scrolling if needed"""
     end_time = time.time() + timeout
     last_html = ""
     
@@ -470,7 +452,7 @@ def scrape_tabs(driver, labels, out_dir: Path, timeout: int):
             time.sleep(0.3)
   
             driver.execute_script("arguments[0].click();", tab)
-            time.sleep(1)  # Give it a moment to activate
+            time.sleep(1)
       
             parent_li = tab.find_element(By.XPATH, "..")
             if "uk-active" in parent_li.get_attribute("class"):
@@ -501,17 +483,14 @@ def scrape_tabs(driver, labels, out_dir: Path, timeout: int):
             html = table.get_attribute("outerHTML")
             print(f"Table found!")
 
-        # Extract data
         headers, rows = extract_table(html)
-        
-        # Save to CSV
+
         output_path = out_dir / TAB_FILENAMES.get(
             label, f"{normalize_filename(label)}.csv"
         )
         write_csv(headers, rows, output_path)
         results[label] = (output_path, len(rows))
-        print(f"✓ Saved {label}: {len(rows)} rows -> {output_path}")
-
+        print(f"Saved {label}: {len(rows)} rows -> {output_path}")
     return results
 
 
