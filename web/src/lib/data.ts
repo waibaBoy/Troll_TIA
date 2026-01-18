@@ -49,7 +49,51 @@ export async function getFlightSummary() {
     return [];
   }
 
-  return data as FlightSummary[];
+  const flights = data as FlightSummary[];
+
+  // Filter flights to show "Relevant Live Board"
+  // Logic: Show Future flights OR Active flights OR Recent Past (completed within last 2 hours)
+
+  // 1. Calculate Nepal Time
+  const now = new Date();
+  const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+  const nepalOffsetMs = (5 * 60 + 45) * 60 * 1000;
+  const nepalDateObj = new Date(utcMs + nepalOffsetMs);
+
+  const currentTotalMins = nepalDateObj.getHours() * 60 + nepalDateObj.getMinutes();
+  const todayStr = nepalDateObj.toISOString().split('T')[0];
+
+  return flights.filter(flight => {
+    // If flight date is future, keep
+    if (flight.flight_date > todayStr) return true;
+    // If flight date is past, drop
+    if (flight.flight_date < todayStr) return false;
+
+    // Flight is today. Check time.
+    // scheduled_time format "HH:MM:SS"
+    const [h, m] = flight.scheduled_time.split(':').map(Number);
+    const flightMins = h * 60 + m;
+
+    const minsSinceScheduled = currentTotalMins - flightMins;
+
+    // 1. Future flights (scheduled time is ahead) -> Always show
+    if (minsSinceScheduled < 0) return true;
+
+    // 2. Active flights (Not landed/departed/cancelled) -> Always show (e.g. delayed 5 hours)
+    const status = flight.final_status?.toLowerCase() || '';
+    const isCompleted = ['landed', 'departed', 'canceled', 'cancelled'].some(s => status.includes(s));
+
+    if (!isCompleted) {
+      // Stale Data Check: If status is seemingly active ("On Time") but scheduled > 5 hours ago, hide it.
+      if (minsSinceScheduled > 300) return false;
+      return true;
+    }
+
+    // 3. Recently completed (within last 3 hours to be generous) -> Show
+    if (minsSinceScheduled <= 180) return true;
+
+    return false; // Hide old completed flights
+  });
 }
 
 export async function getStatusHistory() {

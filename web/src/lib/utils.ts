@@ -13,7 +13,7 @@ export function formatTime(timeStr: string | null) {
 }
 
 export function getStatusColor(status: string | null, delay: number | null) {
-  if (!status) return 'text-slate-400';
+  if (!status) return 'text-slate-500';
 
   const s = status.toLowerCase();
   if (s.includes('cancel')) return 'text-status-cancelled';
@@ -22,5 +22,5 @@ export function getStatusColor(status: string | null, delay: number | null) {
     return 'text-status-ontime';
   }
   if (delay && delay > 15) return 'text-status-delayed';
-  return 'text-slate-200';
+  return 'text-slate-700';
 }

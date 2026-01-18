@@ -1,5 +1,5 @@
 Airlines,SCHEDULED TIME OF ARRIVAL,Estimated Time of Arrival,Flight,Origin,Status
-Flydubai,8:20:0,8:40:0,FZ1133,Dubai,Landed
+Flydubai,8:20:0,8:40:0,FZ1133,Dubai,Completed
 Himalaya Airlines,8:45:0,9:5:0,H9766,Dubai,Landed
 Himalaya Airlines,8:50:0,9:28:0,H9364,Doha,Landed
 Air India,9:5:0,9:23:0,AI213,Delhi,Landed
@@ -9,9 +9,9 @@ Nepal Airlines,9:40:0,12:21:0,RA242,Dammam,Delayed
 IndiGo AIR,9:50:0,10:20:0,6E1151,Delhi,----
 Buddha Air,11:5:0,11:5:0,U4164,Kolkata,----
 Turkish Airlines,11:10:0,12:2:0,TK726,Istanbul,Delayed
-Sichuan Airlines,11:20:0,10:54:0,3U3901,Tianfu,----
+Sichuan Airlines,11:20:0,10:58:0,3U3901,Tianfu,----
 China Southern,11:30:0,11:17:0,CZ6067,Guangzhou,----
-Air China,11:35:0,11:54:0,CA437,Tianfu,----
+Air China,11:35:0,11:44:0,CA437,Tianfu,----
 SriLankan Airlines,11:50:0,11:32:0,UL181,Colombo,----
 IndiGo AIR,12:15:0,12:15:0,6E1153,Delhi,----
 Thai Airways,12:15:0,12:15:0,TG319,Bangkok,----

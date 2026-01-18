@@ -1,9 +1,9 @@
 Airlines,Scheduled Time of Departure,Actual Time of Departure,Flight,Destination,Status
 Qatar Airways,9:32:0,9:32:0,QR649,Doha,Departed
-Flydubai,9:40:0,9:40:0,FZ1134,Dubai,Last Call
-Air Arabia Abu Dhabi,10:10:0,10:10:0,3L044,Abu Dhabi,Last Call
+Flydubai,9:50:0,9:50:0,FZ1134,Dubai,Departed
+Air Arabia Abu Dhabi,10:7:0,10:7:0,3L044,Abu Dhabi,Departed
 Air India,10:20:0,10:20:0,AI214,Delhi,Boarding
-IndiGo AIR,10:50:0,10:50:0,6E1152,Delhi,Check in
+IndiGo AIR,11:15:0,11:15:0,6E1152,Delhi,Security Check
 Sichuan Airlines,12:20:0,12:20:0,3U3902,Tianfu,Check in
 China Southern,12:30:0,12:30:0,CZ6068,Guangzhou,Check in
 Air China,12:35:0,12:35:0,CA438,Tianfu,Check in

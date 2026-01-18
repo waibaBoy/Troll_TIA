@@ -5,7 +5,7 @@ Uses One Call 3.0 API.
 import os
 import httpx
 from typing import Dict, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -48,7 +48,7 @@ class WeatherClient:
                 "precipitation_mm": 0.0, # One Call "current" doesn't strictly give precip volume unless it rained last hour
                 "humidity_percent": current.get("humidity"),
                 "conditions": current.get("weather", [{}])[0].get("description", "unknown"),
-                "observed_at": datetime.fromtimestamp(current.get("dt", datetime.now().timestamp())).isoformat(),
+                "observed_at": datetime.fromtimestamp(current.get("dt", datetime.now().timestamp()), tz=timezone.utc).isoformat(),
                 "raw_data": current
             }
 
