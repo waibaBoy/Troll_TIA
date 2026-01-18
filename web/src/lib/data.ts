@@ -1,4 +1,5 @@
 import { supabaseAdmin } from './supabase';
+import { buildNepalDateTime, getNepalNow, toNepalDateString } from './time';
 
 export interface FlightSummary {
   instance_id: string;
@@ -55,13 +56,8 @@ export async function getFlightSummary() {
   // Logic: Show Future flights OR Active flights OR Recent Past (completed within last 2 hours)
 
   // 1. Calculate Nepal Time
-  const now = new Date();
-  const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
-  const nepalOffsetMs = (5 * 60 + 45) * 60 * 1000;
-  const nepalDateObj = new Date(utcMs + nepalOffsetMs);
-
-  const currentTotalMins = nepalDateObj.getHours() * 60 + nepalDateObj.getMinutes();
-  const todayStr = nepalDateObj.toISOString().split('T')[0];
+  const nepalNow = getNepalNow();
+  const todayStr = toNepalDateString(nepalNow);
 
   return flights.filter(flight => {
     // If flight date is future, keep
@@ -70,11 +66,9 @@ export async function getFlightSummary() {
     if (flight.flight_date < todayStr) return false;
 
     // Flight is today. Check time.
-    // scheduled_time format "HH:MM:SS"
-    const [h, m] = flight.scheduled_time.split(':').map(Number);
-    const flightMins = h * 60 + m;
-
-    const minsSinceScheduled = currentTotalMins - flightMins;
+    const scheduledMs = buildNepalDateTime(flight.flight_date, flight.scheduled_time).getTime();
+    if (Number.isNaN(scheduledMs)) return true;
+    const minsSinceScheduled = Math.round((nepalNow.getTime() - scheduledMs) / 60000);
 
     // 1. Future flights (scheduled time is ahead) -> Always show
     if (minsSinceScheduled < 0) return true;
@@ -96,10 +90,12 @@ export async function getFlightSummary() {
   });
 }
 
-export async function getStatusHistory() {
+export async function getStatusHistory(hoursBack = 24) {
+  const cutoffIso = new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString();
   const { data, error } = await supabaseAdmin
     .from('vw_status_history')
     .select('*')
+    .gte('observed_at', cutoffIso)
     .order('observed_at', { ascending: true });
 
   if (error) {
@@ -136,4 +132,47 @@ export async function getLatestWeather() {
   }
 
   return data as WeatherSnapshot;
+}
+
+export interface ScrapeJob {
+  id: string;
+  started_at: string;
+  completed_at: string | null;
+  status: string | null;
+  flights_captured: number | null;
+  error_message: string | null;
+  scrape_type: string | null;
+}
+
+export async function getScrapeJobs(limit = 50) {
+  const { data, error } = await supabaseAdmin
+    .from('scrape_jobs')
+    .select('id, started_at, completed_at, status, flights_captured, error_message, scrape_type')
+    .order('started_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching scrape jobs:', error);
+    return [];
+  }
+
+  return data as ScrapeJob[];
+}
+
+export async function getLatestScrapeJob() {
+  const { data, error } = await supabaseAdmin
+    .from('scrape_jobs')
+    .select('id, started_at, completed_at, status, flights_captured, error_message, scrape_type')
+    .order('started_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error) {
+    if (error.code !== 'PGRST116') {
+      console.error('Error fetching latest scrape job:', error);
+    }
+    return null;
+  }
+
+  return data as ScrapeJob;
 }

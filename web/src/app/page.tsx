@@ -1,18 +1,26 @@
 import React from 'react';
-import { getFlightSummary, getStatusHistory, getLatestWeather } from '@/lib/data';
+import { getFlightSummary, getStatusHistory, getLatestWeather, getLatestScrapeJob } from '@/lib/data';
 import { StatsGrid } from '@/components/StatsGrid';
 import { FlightList } from '@/components/FlightList';
 import { DelayTimeline } from '@/components/DelayTimeline';
 import { WeatherWidget } from '@/components/WeatherWidget';
+import { LiveClock } from '@/components/LiveClock';
+import { formatNepalTime, getNepalNow } from '@/lib/time';
+import { requireAuth } from '@/lib/auth';
+import { logoutAction } from '@/app/login/actions';
+import Link from 'next/link';
 
 // Ensure fresh data on every request
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function DashboardPage() {
+  await requireAuth();
   const flights = await getFlightSummary();
-  const history = await getStatusHistory();
+  const history = await getStatusHistory(24);
   const weather = await getLatestWeather();
+  const serverNowIso = getNepalNow().toISOString();
+  const latestScrape = await getLatestScrapeJob();
 
   // Calculate Stats
   const totalFlights = flights.length;
@@ -62,33 +70,66 @@ export default async function DashboardPage() {
             </p>
           </div>
 
-          <div className="glass-panel-strong rounded-3xl p-5 w-full lg:w-[360px]">
-            <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-500">
-              <span>Network status</span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
-                Stable
-              </span>
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-              <div className="rounded-2xl bg-white/80 border border-slate-100 px-4 py-3">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">Flights now</p>
-                <p className="mt-2 text-2xl font-semibold text-slate-900">{totalFlights}</p>
+          <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+            <LiveClock initialNowIso={serverNowIso} label="Now (Nepal time)" />
+            <div className="glass-panel-strong rounded-3xl p-5 w-full sm:w-[320px]">
+              <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-500">
+                <span>Network status</span>
+                <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
+                  Stable
+                </span>
               </div>
-              <div className="rounded-2xl bg-white/80 border border-slate-100 px-4 py-3">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">On-time</p>
-                <p className="mt-2 text-2xl font-semibold text-slate-900">{Math.round(onTimePercentage)}%</p>
+              <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                <div className="rounded-2xl bg-white/80 border border-slate-100 px-4 py-3">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">Flights now</p>
+                  <p className="mt-2 text-2xl font-semibold text-slate-900">{totalFlights}</p>
+                </div>
+                <div className="rounded-2xl bg-white/80 border border-slate-100 px-4 py-3">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">On-time</p>
+                  <p className="mt-2 text-2xl font-semibold text-slate-900">{Math.round(onTimePercentage)}%</p>
+                </div>
               </div>
-            </div>
-            <div className="mt-4 text-xs text-slate-500">
-              Coverage: arrivals + departures • Update cadence 5 min
+              <div className="mt-4 text-xs text-slate-500 space-y-1">
+                <div>Coverage: arrivals + departures • Update cadence 5 min</div>
+                {latestScrape && (
+                  <div className="flex items-center justify-between">
+                    <span>Last script run</span>
+                    <span className="font-medium text-slate-700">
+                      {formatNepalTime(latestScrape.started_at)} NPT
+                    </span>
+                  </div>
+                )}
+                {latestScrape?.status && (
+                  <div className="flex items-center justify-between">
+                    <span>Status</span>
+                    <span className="font-medium text-slate-700">{latestScrape.status}</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.2em] text-slate-500">
+        <div className="mt-6 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-slate-500">
           <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1">Kathmandu · UTC+5:45</span>
           <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1">Predictive delay lens</span>
           <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1">Seasonal performance</span>
+          <div className="flex items-center gap-2 ml-auto">
+            <Link
+              href="/logs"
+              className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-slate-800 transition"
+            >
+              Logs
+            </Link>
+            <form action={logoutAction}>
+              <button
+                type="submit"
+                className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-slate-800 transition"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 
@@ -103,12 +144,12 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 relative z-10">
         {/* Left: Flight List (takes 3 cols) */}
         <div className="lg:col-span-3">
-          <FlightList flights={flights} />
+          <FlightList flights={flights} serverNowIso={serverNowIso} />
         </div>
 
         {/* Right: Analysis Sidebar (takes 1 col) */}
         <div className="lg:col-span-1 space-y-6">
-          <DelayTimeline history={history} />
+          <DelayTimeline history={history} serverNowIso={serverNowIso} />
           <WeatherWidget weather={weather} />
         </div>
       </div>

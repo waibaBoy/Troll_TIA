@@ -80,7 +80,11 @@ export function WeatherWidget({ weather }: WeatherWidgetProps) {
         </div>
 
         <div className="mt-4 text-[10px] text-slate-500 text-center">
-          Updated: {new Date(weather.observed_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+          Updated: {new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Asia/Kathmandu',
+            hour: '2-digit',
+            minute: '2-digit',
+          }).format(new Date(weather.observed_at))} NPT
         </div>
       </div>
     </div>

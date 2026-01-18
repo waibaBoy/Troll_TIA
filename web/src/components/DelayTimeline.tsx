@@ -1,15 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { FlightStatusHistory } from '@/lib/data';
 import { cn, formatTime } from '@/lib/utils';
 import { Clock, TrendingUp } from 'lucide-react';
 
 interface DelayTimelineProps {
   history: FlightStatusHistory[];
+  serverNowIso?: string;
 }
 
-export function DelayTimeline({ history }: DelayTimelineProps) {
+export function DelayTimeline({ history, serverNowIso }: DelayTimelineProps) {
+  const [windowHours, setWindowHours] = useState(0);
+  const nowMs = useMemo(() => {
+    if (!serverNowIso) return Date.now();
+    const parsed = Date.parse(serverNowIso);
+    return Number.isNaN(parsed) ? Date.now() : parsed;
+  }, [serverNowIso]);
   // 1. Find the flight with the most data points or highest delay
   // For demo, let's group by flight first
   const flightGroups = history.reduce((acc, curr) => {
@@ -33,17 +40,46 @@ export function DelayTimeline({ history }: DelayTimelineProps) {
     new Date(a.observed_at).getTime() - new Date(b.observed_at).getTime()
   );
 
+  const cutoffMs = useMemo(() => {
+    if (windowHours === 0) {
+      const nepalDate = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Kathmandu',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(new Date(nowMs));
+      const startOfDayMs = Date.parse(`${nepalDate}T00:00:00+05:45`);
+      return Number.isNaN(startOfDayMs) ? nowMs : startOfDayMs;
+    }
+    return nowMs - windowHours * 60 * 60 * 1000;
+  }, [nowMs, windowHours]);
+  const windowedHistory = selectedFlightHistory.filter(
+    (obs) => new Date(obs.observed_at).getTime() >= cutoffMs
+  );
+
   return (
     <div className="glass-panel rounded-3xl p-6 h-auto sticky top-6 relative overflow-hidden">
       <div className="absolute inset-0 pattern-grid opacity-30 pointer-events-none" />
       <div className="relative">
-        <div className="flex items-center gap-2 mb-6 text-status-delayed">
-        <TrendingUp className="w-5 h-5" />
-        <h3 className="font-semibold text-lg tracking-tight text-slate-900">Delay Pulse</h3>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2 text-status-delayed">
+            <TrendingUp className="w-5 h-5" />
+            <h3 className="font-semibold text-lg tracking-tight text-slate-900">Delay Pulse</h3>
+          </div>
+          <select
+            className="bg-white/80 border border-slate-200 rounded-full px-3 py-1.5 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-accent/30"
+            value={windowHours}
+            onChange={(e) => setWindowHours(Number(e.target.value))}
+          >
+            <option value={0}>Today</option>
+            <option value={6}>Last 6h</option>
+            <option value={12}>Last 12h</option>
+            <option value={24}>Last 24h</option>
+          </select>
         </div>
 
-        {selectedFlightHistory.length === 0 ? (
-          <p className="text-slate-500 text-sm">No delay history available.</p>
+        {windowedHistory.length === 0 ? (
+          <p className="text-slate-500 text-sm">No delay history in this window.</p>
         ) : (
           <div>
             <div className="mb-4">
@@ -54,7 +90,7 @@ export function DelayTimeline({ history }: DelayTimelineProps) {
             </div>
 
             <div className="relative border-l border-slate-200 pl-6 ml-2 space-y-8 py-2">
-              {selectedFlightHistory.map((obs) => {
+              {windowedHistory.map((obs) => {
                 const delay = obs.delay_minutes_at_observation || 0;
                 const isSignificant = delay > 15;
 
@@ -68,7 +104,11 @@ export function DelayTimeline({ history }: DelayTimelineProps) {
 
                     <div className="flex justify-between items-start">
                       <span className="text-xs font-mono text-slate-400">
-                        {new Date(obs.observed_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {new Intl.DateTimeFormat('en-GB', {
+                          timeZone: 'Asia/Kathmandu',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        }).format(new Date(obs.observed_at))}
                       </span>
                       {delay > 0 && (
                         <span className={cn(
