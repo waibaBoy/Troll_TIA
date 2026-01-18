@@ -1,0 +1,9 @@
+Airlines,Scheduled Time of Arrival,Estimated Time of Arrival,Flight,Origin,Status
+Shree Airlines,16:40:0,19:1:0,SHA738,Biratnagar,Landed
+Yeti Airlines,17:10:0,19:10:0,NYT684,Pokhara,Landed
+Yeti Airlines,17:10:0,19:23:0,NYT878,Bhairahawa,Landed
+Buddha Air,18:10:0,19:5:0,BHA806,Bhairahawa,Landed
+Shree Airlines,18:25:0,19:26:0,SHA660,Pokhara,Landed
+Buddha Air,19:5:0,19:45:0,BHA666,Pokhara,----
+Buddha Air,19:50:0,20:10:0,BHA808,Bhairahawa,----
+Buddha Air,20:0:0,20:10:0,BHA714,Biratnagar,----

@@ -1,0 +1,20 @@
+Airlines,Scheduled Time of Departure,Actual Time of Departure,Flight,Destination,Status
+Nepal Airlines,19:15:0,19:15:0,RA217,Delhi,Departed
+Korean Air,19:30:0,19:30:0,KE696,Seoul/Incheon,Departed
+Flydubai,19:40:0,19:40:0,FZ1538,Dubai,Boarding Completed
+Himalaya Airlines,20:5:0,20:5:0,H9559,Dammam,Last Call
+Air India,21:5:0,21:5:0,AI212,Delhi,Security Check
+Air Arabia,21:25:0,21:25:0,G9531,Sharjah,Security Check
+Batik Air,21:35:0,21:35:0,OD181,Kuala Lumpur,Check in
+Himalaya Airlines,21:40:0,21:40:0,H9363,Doha,Check in
+Nepal Airlines,21:45:0,21:45:0,RA239,Doha,Check in
+Himalaya Airlines,22:30:0,22:30:0,H9765,Dubai,Check in
+Cathay Pacific,22:55:0,22:55:0,CX640,Hong Kong,Check in
+Nepal Airlines,23:0:0,23:0:0,RA241,Dammam,Check in
+Singapore Airlines,23:5:0,23:5:0,SQ441,Singapore,Check in
+Nepal Airlines,23:15:0,23:15:0,RA229,Dubai,Check in
+China Southern,23:30:0,23:30:0,CZ3068,Guangzhou,Check in
+Biman Bangladesh,0:15:0,0:15:0,BG372,Dhaka,Delayed
+Kuwait Airways,0:15:0,0:15:0,KU1394,Kuwait,----
+Thai Airways,0:25:0,0:25:0,TG310,Bangkok,----
+Flydubai,0:30:0,0:30:0,FZ574,Dubai,----

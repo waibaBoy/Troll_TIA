@@ -2,7 +2,9 @@ import argparse
 import csv
 import os
 import re
+import sys
 import time
+from datetime import date
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -32,23 +34,27 @@ TAB_FILENAMES = {
     "Domestic-Departure": "Domestic_departure.csv",
 }
 
+# Add project root to path for imports
+project_root = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(project_root))
+
 
 def handle_verification(driver, timeout: int = 30):
     print("Checking for verification challenges...")
-    
+
     end_time = time.time() + timeout
     debug_printed = False
-    
+
     while time.time() < end_time:
         try:
             title = driver.title.lower()
             page_source = driver.page_source.lower()
-            
+
             if "just a moment" in title or "verify you are human" in page_source:
                 print("Verification page detected, waiting for checkbox...")
-                
+
                 time.sleep(2)
-                
+
                 if not debug_printed:
                     print("\n=== DEBUG INFO ===")
                     print(f"Page title: {driver.title}")
@@ -60,7 +66,7 @@ def handle_verification(driver, timeout: int = 30):
                         id_attr = iframe.get_attribute("id") or "no id"
                         title_attr = iframe.get_attribute("title") or "no title"
                         print(f"  iframe {idx}: src={src[:80]}, id={id_attr}, title={title_attr}")
-                    
+
                     inputs = driver.find_elements(By.TAG_NAME, "input")
                     print(f"\nFound {len(inputs)} input elements:")
                     for idx, inp in enumerate(inputs):
@@ -79,7 +85,7 @@ def handle_verification(driver, timeout: int = 30):
                         class_attr = btn.get_attribute("class") or "no class"
                         visible = btn.is_displayed()
                         print(f"  button {idx}: text={text}, id={id_attr}, class={class_attr}, visible={visible}")
-                    
+
                     print("==================\n")
                     debug_printed = True
                 try:
@@ -89,14 +95,14 @@ def handle_verification(driver, timeout: int = 30):
                         "iframe[id*='challenge']",
                         "iframe",
                     ]
-                    
+
                     for selector in iframe_selectors:
                         iframes = driver.find_elements(By.CSS_SELECTOR, selector)
                         for iframe in iframes:
                             try:
                                 print(f"Trying iframe: {iframe.get_attribute('src') or iframe.get_attribute('id')}")
                                 driver.switch_to.frame(iframe)
-                                
+
                                 checkbox_selectors = [
                                     "input[type='checkbox']",
                                     ".cb-lb",
@@ -104,7 +110,7 @@ def handle_verification(driver, timeout: int = 30):
                                     "input",
                                     "span.cb-lb",
                                 ]
-                                
+
                                 for cb_selector in checkbox_selectors:
                                     try:
                                         checkbox = WebDriverWait(driver, 3).until(
@@ -122,7 +128,7 @@ def handle_verification(driver, timeout: int = 30):
                                             return True
                                     except:
                                         continue
-                                
+
                                 driver.switch_to.default_content()
                             except:
                                 driver.switch_to.default_content()
@@ -137,7 +143,7 @@ def handle_verification(driver, timeout: int = 30):
                         "#challenge-form input",
                         "input[name*='challenge']",
                     ]
-                    
+
                     for selector in checkbox_selectors:
                         try:
                             checkboxes = driver.find_elements(By.CSS_SELECTOR, selector)
@@ -161,14 +167,14 @@ def handle_verification(driver, timeout: int = 30):
                     return True
             except:
                 pass
-            
+
             print("Still waiting for verification... (check browser window)")
             time.sleep(2)
-            
+
         except Exception as e:
             print(f"Exception during verification: {e}")
             time.sleep(1)
-    
+
     print("Verification timeout reached")
     return False
 
@@ -235,7 +241,7 @@ def create_driver(headless: bool):
         if headless:
             options.add_argument("--headless=new")
         options.add_argument("--window-size=1400,900")
-        
+
         driver = uc.Chrome(options=options, version_main=None)
         print("Successfully initialized undetected-chromedriver")
         return driver
@@ -324,7 +330,7 @@ def find_tab(driver, label: str):
             href_id = "#domDeparted"
         else:
             href_id = None
-        
+
         if href_id:
             xpath = f"//a[@href='{href_id}']"
             candidates = driver.find_elements(By.XPATH, xpath)
@@ -333,7 +339,7 @@ def find_tab(driver, label: str):
                     return candidate
     except:
         pass
-    
+
     try:
         xpath = f"//a[contains(normalize-space(.), '{label}')]"
         candidates = driver.find_elements(By.XPATH, xpath)
@@ -342,7 +348,7 @@ def find_tab(driver, label: str):
                 return candidate
     except:
         pass
-    
+
     return None
 
 
@@ -355,7 +361,7 @@ def resolve_panel_selector(tab):
     )
     if not target:
         return None
-    
+
     target = target.strip()
     if not target or target.startswith("javascript:"):
         return None
@@ -387,19 +393,19 @@ def find_panel(driver, selector: str | None):
 def wait_for_table(driver, panel_selector: str | None, timeout: int):
     end_time = time.time() + timeout
     last_html = ""
-    
+
     while time.time() < end_time:
         panel = find_panel(driver, panel_selector)
         if panel is None:
             time.sleep(0.5)
             continue
-        
+
         try:
             driver.execute_script("arguments[0].scrollIntoView(true);", panel)
             time.sleep(0.3)
         except:
             pass
-        
+
         try:
             table = panel.find_element(By.CSS_SELECTOR, "table")
         except NoSuchElementException:
@@ -407,19 +413,19 @@ def wait_for_table(driver, panel_selector: str | None, timeout: int):
             continue
 
         html = table.get_attribute("innerHTML") or ""
-        
+
         if "loading" in html.lower() and html != last_html:
             last_html = html
             time.sleep(0.5)
             continue
-        
+
         try:
             rows = table.find_elements(By.CSS_SELECTOR, "tbody tr")
             if len(rows) > 0:
                 return table
         except:
             pass
-        
+
         time.sleep(0.5)
 
     return None
@@ -435,13 +441,24 @@ def wait_for_tabs(driver, labels, timeout: int):
     return []
 
 
-def scrape_tabs(driver, labels, out_dir: Path, timeout: int):
+def scrape_tabs(driver, labels, out_dir: Path, timeout: int, store_supabase: bool = False, store_csv: bool = True):
     results = {}
-    
+
+    # Import Supabase integration if needed
+    supabase_integration = None
+    if store_supabase:
+        try:
+            from Data.supabase_integration import process_scraped_data
+            supabase_integration = process_scraped_data
+            print("📦 Supabase integration enabled")
+        except ImportError as e:
+            print(f"⚠️  Supabase integration not available: {e}")
+            store_supabase = False
+
     for label in labels:
         print(f"\n--- Processing tab: {label} ---")
         tab = find_tab(driver, label)
-        
+
         if tab is None:
             print(f"Tab not found: {label}")
             continue
@@ -450,17 +467,17 @@ def scrape_tabs(driver, labels, out_dir: Path, timeout: int):
         try:
             driver.execute_script("arguments[0].scrollIntoView(true);", tab)
             time.sleep(0.3)
-  
+
             driver.execute_script("arguments[0].click();", tab)
             time.sleep(1)
-      
+
             parent_li = tab.find_element(By.XPATH, "..")
             if "uk-active" in parent_li.get_attribute("class"):
                 print("Tab activated successfully")
             else:
                 print("Tab may not be active yet, waiting...")
                 time.sleep(1)
-                
+
         except (StaleElementReferenceException, TimeoutException) as e:
             print(f"Error clicking tab: {e}")
             pass
@@ -474,7 +491,7 @@ def scrape_tabs(driver, labels, out_dir: Path, timeout: int):
 
         print("Waiting for table to load...")
         table = wait_for_table(driver, panel_selector, timeout)
-        
+
         if table is None:
             print(f"Table not found for {label}, trying to get panel HTML anyway...")
             panel = find_panel(driver, panel_selector)
@@ -485,12 +502,29 @@ def scrape_tabs(driver, labels, out_dir: Path, timeout: int):
 
         headers, rows = extract_table(html)
 
-        output_path = out_dir / TAB_FILENAMES.get(
-            label, f"{normalize_filename(label)}.csv"
-        )
-        write_csv(headers, rows, output_path)
-        results[label] = (output_path, len(rows))
-        print(f"Saved {label}: {len(rows)} rows -> {output_path}")
+        # Store to CSV if enabled
+        if store_csv:
+            output_path = out_dir / TAB_FILENAMES.get(
+                label, f"{normalize_filename(label)}.csv"
+            )
+            write_csv(headers, rows, output_path)
+            print(f"💾 Saved CSV: {len(rows)} rows -> {output_path}")
+
+        # Store to Supabase if enabled
+        if store_supabase and supabase_integration:
+            try:
+                processed, observations = supabase_integration(
+                    headers=headers,
+                    rows=rows,
+                    tab_label=label,
+                    flight_date=date.today()
+                )
+                print(f"☁️  Supabase: {processed} flights, {observations} new observations")
+            except Exception as e:
+                print(f"❌ Supabase error: {e}")
+
+        results[label] = (len(rows), headers)
+
     return results
 
 
@@ -517,6 +551,16 @@ def main():
         action="store_true",
         help="Skip auto-verification and wait for manual completion.",
     )
+    parser.add_argument(
+        "--supabase",
+        action="store_true",
+        help="Store scraped data in Supabase database.",
+    )
+    parser.add_argument(
+        "--no-csv",
+        action="store_true",
+        help="Skip CSV output (use with --supabase).",
+    )
     args = parser.parse_args()
 
     script_dir = Path(__file__).resolve().parent
@@ -526,7 +570,7 @@ def main():
     try:
         print(f"Loading {URL}...")
         driver.get(URL)
-        
+
         if not args.manual:
             verification_success = handle_verification(driver, timeout=30)
             if not verification_success:
@@ -536,22 +580,29 @@ def main():
         else:
             print("Manual mode: complete verification in browser.")
             input("Press Enter once you've completed the verification...")
-        
+
         print("Waiting for page content to load...")
         tabs_ready = wait_for_tabs(driver, TAB_LABELS, args.timeout)
-        
+
         if not tabs_ready:
             print("Tabs still not visible. Waiting for manual intervention...")
             input("If needed, complete any remaining challenges and press Enter...")
             tabs_ready = wait_for_tabs(driver, TAB_LABELS, args.timeout)
-        
+
         if not tabs_ready:
             raise RuntimeError("Tabs were not detected after verification. Page may have changed.")
 
         print(f"Found {len(tabs_ready)} tabs. Starting scrape...")
-        scrape_tabs(driver, TAB_LABELS, out_dir, args.timeout)
+        scrape_tabs(
+            driver,
+            TAB_LABELS,
+            out_dir,
+            args.timeout,
+            store_supabase=args.supabase,
+            store_csv=not args.no_csv
+        )
         print("\nScraping completed successfully!")
-        
+
     finally:
         driver.quit()
 

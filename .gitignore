@@ -20,3 +20,42 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+
+### Python ###
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Generated/scraped data (keep sample data, ignore newly scraped)
+routes/Data/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables (NEVER commit this!)
+.env
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+.next/
+dist/
+build/
+.env.local

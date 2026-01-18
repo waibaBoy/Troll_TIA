@@ -1,0 +1,19 @@
+Airlines,SCHEDULED TIME OF ARRIVAL,Estimated Time of Arrival,Flight,Origin,Status
+Qatar Airways,16:25:0,16:20:0,QR646,Doha,Completed
+Air India,16:30:0,16:26:0,AI219,Delhi,Completed
+Nepal Airlines,16:30:0,17:12:0,RA434,Narita,Landed
+Korean Air,17:30:0,17:25:0,KE695,Seoul/Incheon,Landed
+Flydubai,18:40:0,18:20:0,FZ1537,Dubai,Landed
+Air India,20:5:0,19:55:0,AI211,Delhi,----
+Batik Air,20:35:0,20:47:0,OD182,Kuala Lumpur,----
+Air Arabia,20:45:0,21:27:0,G9530,Sharjah,----
+Cathay Pacific,21:30:0,21:15:0,CX603,Hong Kong,----
+Nepal Airlines,21:50:0,21:50:0,RA410,Hong Kong,----
+Nepal Airlines,22:0:0,22:0:0,RA218,Delhi,Delayed
+Singapore Airlines,22:5:0,21:36:0,SQ442,Singapore,----
+China Southern,22:30:0,22:2:0,CZ3067,Guangzhou,----
+Kuwait Airways,23:0:0,22:57:0,KU1393,Kuwait,----
+Thai Airways,23:10:0,23:10:0,TG309,Bangkok,----
+Biman Bangladesh,23:25:0,23:25:0,BG371,Dhaka,Delayed
+Flydubai,23:30:0,23:30:0,FZ573,Dubai,----
+Air India,0:15:0,0:15:0,AI223,Delhi,----

@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Custom AeroGlass Colors */
+  --color-glass-surface: var(--glass-surface);
+  --color-glass-border: var(--glass-border);
+
+  --color-status-ontime: var(--status-ontime);
+  --color-status-delayed: var(--status-delayed);
+  --color-status-cancelled: var(--status-cancelled);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Animations */
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+:root {
+  /* Default to Dark Mode for this dashboard */
+  --background: #0B0F19; /* Deep midnight */
+  --foreground: #F8FAFC; /* Slate 50 */
+
+  --glass-surface: rgba(30, 41, 59, 0.4); /* Slate 800 with opacity */
+  --glass-border: rgba(148, 163, 184, 0.1); /* Slate 400 with low opacity */
+
+  --status-ontime: #10B981; /* Emerald 500 */
+  --status-delayed: #F59E0B; /* Amber 500 */
+  --status-cancelled: #EF4444; /* Red 500 */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.05), transparent 25%);
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--glass-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px currentColor;
+}
