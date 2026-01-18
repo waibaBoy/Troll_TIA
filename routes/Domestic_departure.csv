@@ -1,46 +1,22 @@
 Airlines,SCHEDULED TIME OF Departure,Actual Time of Departure,Flight,Destination,Status
-Shree Airlines,6:5:0,7:3:0,SHA601,Mountain Flight,Departed
-Shree Airlines,6:5:0,7:16:0,SHA602,Mountain Flight,Departed
-Buddha Air,6:15:0,7:7:0,BHA100,Mountain Flight,Departed
-Buddha Air,6:15:0,7:12:0,BHA200,Mountain Flight,Departed
-Tara Air,6:30:0,6:30:0,TRA111,Lukla,Boarding
-Yeti Airlines,6:45:0,7:19:0,NYT301,Mountain Flight,Departed
-Yeti Airlines,6:45:0,6:45:0,NYT302,Mountain Flight,----
-Nepal Airlines,6:55:0,6:55:0,RA133,Rumjatar Airport,----
-Nepal Airlines,6:55:0,6:55:0,RA181,Rukum,----
-Summit Air,6:55:0,6:55:0,SMA301,Lukla,----
-Sita Air,6:55:0,6:55:0,STA601,Lukla,----
-Buddha Air,7:0:0,7:0:0,BHA951,Bhadrapur,Boarding
-Buddha Air,7:20:0,8:30:0,BHA351,Bharatpur,Delay due to weather
-Buddha Air,7:20:0,7:20:0,BHA451,Nepalgunj,Boarding
-Shree Airlines,7:30:0,7:30:0,SHA731,Biratnagar,----
-Buddha Air,7:55:0,7:55:0,BHA133,Surkhet,----
-Buddha Air,7:55:0,7:55:0,BHA851,Bhairahawa,----
-Buddha Air,8:0:0,8:0:0,BHA251,Dhangadhi,----
-Buddha Air,8:0:0,8:0:0,BHA501,Janakpur,----
-Buddha Air,8:0:0,8:0:0,BHA701,Biratnagar,----
-Yeti Airlines,8:0:0,8:0:0,NYT673,Pokhara,----
-Buddha Air,8:5:0,8:5:0,BHA551,Simara Airport,----
-Yeti Airlines,8:5:0,8:5:0,NYT871,Bhairahawa,----
-Sita Air,8:5:0,8:5:0,STA603,Lukla,----
-Shree Airlines,8:15:0,8:15:0,SHA221,Dhangadhi,----
-Buddha Air,8:20:0,8:20:0,BHA603,Pokhara,----
-Yeti Airlines,8:20:0,8:20:0,NYT781,Biratnagar,----
-Shree Airlines,8:25:0,8:25:0,SHA655,Pokhara,----
-Summit Air,8:25:0,8:25:0,SMA303,Lukla,----
-Yeti Airlines,8:30:0,8:30:0,NYT927,Bhadrapur,----
-Nepal Airlines,8:35:0,8:35:0,RA177,Resunga,----
-Shree Airlines,8:35:0,8:35:0,SHA431,Nepalgunj,----
-Buddha Air,8:55:0,8:55:0,BHA605,Pokhara,----
-Buddha Air,9:0:0,9:0:0,BHA853,Bhairahawa,----
+Buddha Air,7:20:0,9:32:0,BHA351,Bharatpur,Departed
+Shree Airlines,7:30:0,9:45:0,SHA731,Biratnagar,Delay due to weather
+Buddha Air,7:55:0,10:0:0,BHA851,Bhairahawa,Delay due to weather
+Buddha Air,8:0:0,9:30:0,BHA501,Janakpur,Boarding
+Buddha Air,8:0:0,10:0:0,BHA701,Biratnagar,Delay due to weather
+Yeti Airlines,8:5:0,10:0:0,NYT871,Bhairahawa,Delay due to weather
+Shree Airlines,8:15:0,9:0:0,SHA221,Dhangadhi,Departed
+Yeti Airlines,8:20:0,10:0:0,NYT781,Biratnagar,Delay due to weather
+Shree Airlines,8:35:0,9:18:0,SHA431,Nepalgunj,Departed
+Buddha Air,8:55:0,9:34:0,BHA605,Pokhara,Boarding
+Buddha Air,9:0:0,10:0:0,BHA853,Bhairahawa,Delay due to weather
 Shree Airlines,9:30:0,9:30:0,SHA733,Biratnagar,----
 Buddha Air,9:40:0,9:40:0,BHA281,Tumlingtar,----
-Buddha Air,9:45:0,9:45:0,BHA371,Bharatpur,----
-Buddha Air,9:45:0,9:45:0,BHA607,Pokhara,----
+Buddha Air,9:45:0,9:45:0,BHA371,Bharatpur,Boarding
+Buddha Air,9:45:0,9:45:0,BHA607,Pokhara,Boarding
 Buddha Air,9:45:0,9:45:0,BHA953,Bhadrapur,----
-Yeti Airlines,9:45:0,9:45:0,NYT675,Pokhara,----
+Yeti Airlines,9:45:0,9:45:0,NYT675,Pokhara,Boarding
 Shree Airlines,10:0:0,10:0:0,SHA941,Bhadrapur,----
-Yeti Airlines,10:5:0,10:5:0,NYT671,Pokhara,----
 Buddha Air,10:15:0,10:15:0,BHA703,Biratnagar,----
 Shree Airlines,10:15:0,10:15:0,SHA121,Surkhet,----
 Yeti Airlines,10:20:0,10:20:0,NYT921,Bhadrapur,----

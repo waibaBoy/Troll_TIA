@@ -34,6 +34,41 @@ class AirportRepository:
         airport = self.get_by_iata(iata_code)
         return airport["id"] if airport else None
 
+    def get_or_create(self, iata_code: str, city_name: str, country: str = "Nepal") -> Dict:
+        """
+        Get airport by IATA code, or create it if not found.
+        This enables auto-discovery of new airports.
+        """
+        # Check cache first
+        if iata_code in self._cache:
+            return self._cache[iata_code]
+
+        # Try to find existing
+        result = self.table.select("*").eq("iata_code", iata_code).execute()
+        if result.data:
+            self._cache[iata_code] = result.data[0]
+            return result.data[0]
+
+        # Auto-create new airport
+        print(f"🆕 Auto-discovering new airport: {iata_code} ({city_name})")
+        new_airport = {
+            "iata_code": iata_code,
+            "name": f"{city_name} Airport",
+            "city": city_name,
+            "country": country,
+        }
+
+        try:
+            insert_result = self.table.insert(new_airport).execute()
+            if insert_result.data:
+                self._cache[iata_code] = insert_result.data[0]
+                print(f"✅ Created airport: {iata_code}")
+                return insert_result.data[0]
+        except Exception as e:
+            print(f"⚠️  Failed to create airport {iata_code}: {e}")
+
+        return None
+
 
 class AirlineRepository:
     """Repository for airline operations."""
@@ -74,19 +109,32 @@ class RouteRepository:
         self.airport_repo = AirportRepository()
         self._cache: Dict[str, str] = {}  # "origin-dest" -> id cache
 
-    def get_or_create(self, origin_iata: str, dest_iata: str) -> str:
-        """Get or create route between airports. Returns ID."""
+    def get_or_create(self, origin_iata: str, dest_iata: str, origin_city: str = None, dest_city: str = None) -> str:
+        """
+        Get or create route between airports. Returns ID.
+        Uses auto-discovery for unknown airports.
+        """
         cache_key = f"{origin_iata}-{dest_iata}"
         if cache_key in self._cache:
             return self._cache[cache_key]
 
-        origin_id = self.airport_repo.get_id_by_iata(origin_iata)
-        dest_id = self.airport_repo.get_id_by_iata(dest_iata)
+        # Get or create origin airport (auto-discovery)
+        origin = self.airport_repo.get_by_iata(origin_iata)
+        if not origin and origin_city:
+            origin = self.airport_repo.get_or_create(origin_iata, origin_city)
 
-        if not origin_id or not dest_id:
-            raise ValueError(f"Airport not found: {origin_iata} or {dest_iata}")
+        # Get or create destination airport (auto-discovery)
+        dest = self.airport_repo.get_by_iata(dest_iata)
+        if not dest and dest_city:
+            dest = self.airport_repo.get_or_create(dest_iata, dest_city)
 
-        # Try to find existing
+        if not origin or not dest:
+            raise ValueError(f"Airport not found and could not be created: {origin_iata} or {dest_iata}")
+
+        origin_id = origin["id"]
+        dest_id = dest["id"]
+
+        # Try to find existing route
         result = self.table.select("id").eq(
             "origin_airport_id", origin_id
         ).eq(
@@ -98,11 +146,11 @@ class RouteRepository:
             return result.data[0]["id"]
 
         # Determine route type
-        origin = self.airport_repo.get_by_iata(origin_iata)
-        dest = self.airport_repo.get_by_iata(dest_iata)
-        route_type = "domestic" if origin["country"] == "Nepal" and dest["country"] == "Nepal" else "international"
+        origin_country = origin.get("country", "Nepal")
+        dest_country = dest.get("country", "Nepal")
+        route_type = "domestic" if origin_country == "Nepal" and dest_country == "Nepal" else "international"
 
-        # Create new
+        # Create new route
         result = self.table.insert({
             "origin_airport_id": origin_id,
             "destination_airport_id": dest_id,
@@ -130,11 +178,13 @@ class FlightScheduleRepository:
         flight_number: str,
         origin_iata: str,
         dest_iata: str,
-        direction: str
+        direction: str,
+        origin_city: str = None,
+        dest_city: str = None
     ) -> str:
         """Get or create a flight schedule. Returns ID."""
         airline_id = self.airline_repo.get_or_create(airline_name)
-        route_id = self.route_repo.get_or_create(origin_iata, dest_iata)
+        route_id = self.route_repo.get_or_create(origin_iata, dest_iata, origin_city, dest_city)
 
         cache_key = f"{flight_number}-{route_id}-{direction}"
         if cache_key in self._cache:
@@ -192,24 +242,30 @@ class FlightInstanceRepository:
         For arrivals: origin is from scraper, destination is primary airport (KTM)
         For departures: origin is primary airport, destination is from scraper
         """
-        # Determine origin and destination
+        # Determine origin and destination with city names
         if flight_data.direction == "arrival":
             origin = flight_data.origin
+            origin_city = flight_data.origin_city
             dest = primary_airport
+            dest_city = "Kathmandu"
         else:
             origin = primary_airport
+            origin_city = "Kathmandu"
             dest = flight_data.destination
+            dest_city = flight_data.destination_city
 
         if not origin or not dest:
             raise ValueError(f"Missing origin/destination for {flight_data.flight_number}")
 
-        # Get or create schedule
+        # Get or create schedule (with auto-discovery for unknown airports)
         schedule_id = self.schedule_repo.get_or_create(
             airline_name=flight_data.airline,
             flight_number=flight_data.flight_number,
             origin_iata=origin,
             dest_iata=dest,
-            direction=flight_data.direction
+            direction=flight_data.direction,
+            origin_city=origin_city,
+            dest_city=dest_city
         )
 
         # Calculate delays

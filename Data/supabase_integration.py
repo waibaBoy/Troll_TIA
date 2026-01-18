@@ -13,7 +13,7 @@ sys.path.insert(0, str(project_root))
 
 from Data.models import FlightData
 from Data.repository import FlightDataRepository
-from Data.airport_codes import get_iata_code
+from Data.airport_codes import get_iata_code, generate_iata_code
 from Data.weather_client import WeatherClient
 
 
@@ -115,15 +115,21 @@ class ScraperDBIntegration:
             if not airline or not flight_number:
                 return None
 
-            # Map city name to IATA code
-            location_iata = get_iata_code(location)
+            # Map city name to IATA code (with auto-discovery fallback)
+            iata_code = get_iata_code(location)
+            if iata_code is None:
+                # Generate a code for auto-discovery
+                iata_code = generate_iata_code(location)
+                print(f"🔍 Auto-discovering: {location} -> {iata_code}")
 
-            # Create FlightData object
+            # Create FlightData object with city names for auto-discovery
             flight_data = FlightData(
                 airline=airline,
                 flight_number=flight_number,
-                origin=location_iata if direction == "arrival" else None,
-                destination=location_iata if direction == "departure" else None,
+                origin=iata_code if direction == "arrival" else None,
+                destination=iata_code if direction == "departure" else None,
+                origin_city=location if direction == "arrival" else None,
+                destination_city=location if direction == "departure" else None,
                 scheduled_time=scheduled_str,
                 estimated_time=estimated_str,
                 actual_time=actual_str,

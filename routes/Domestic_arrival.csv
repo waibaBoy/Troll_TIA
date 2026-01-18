@@ -1,31 +1,25 @@
 Airlines,Scheduled Time of Arrival,Estimated Time of Arrival,Flight,Origin,Status
-Shree Airlines,6:55:0,6:55:0,SHA601,Mountain Flight,----
-Shree Airlines,6:55:0,6:55:0,SHA602,Mountain Flight,----
-Buddha Air,7:15:0,8:10:0,BHA100,Mountain Flight,----
-Buddha Air,7:15:0,8:15:0,BHA200,Mountain Flight,----
-Yeti Airlines,7:45:0,7:45:0,NYT301,Mountain Flight,----
-Yeti Airlines,7:45:0,7:45:0,NYT302,Mountain Flight,----
-Shree Airlines,7:45:0,7:45:0,SHA440,Nepalgunj,----
-Tara Air,7:50:0,7:50:0,TRA112,Lukla,----
-Buddha Air,7:55:0,7:55:0,BHA668,Pokhara,----
-Yeti Airlines,7:55:0,7:55:0,NYT690,Pokhara,----
-Shree Airlines,7:55:0,7:55:0,SHA230,Dhangadhi,----
-Sita Air,8:0:0,8:0:0,STA602,Lukla,----
-Summit Air,8:10:0,8:10:0,SMA302,Lukla,----
-Buddha Air,8:15:0,8:15:0,BHA902,Bhadrapur,----
+Shree Airlines,6:55:0,8:0:0,SHA601,Mountain Flight,Landed
+Shree Airlines,6:55:0,8:15:0,SHA602,Mountain Flight,Landed
+Yeti Airlines,7:45:0,8:45:0,NYT301,Mountain Flight,Landed
+Shree Airlines,7:45:0,8:51:0,SHA440,Nepalgunj,Landed
+Tara Air,7:50:0,9:13:0,TRA112,Lukla,Landed
+Buddha Air,7:55:0,8:29:0,BHA668,Pokhara,Landed
+Yeti Airlines,7:55:0,8:49:0,NYT690,Pokhara,Landed
+Shree Airlines,7:55:0,8:32:0,SHA230,Dhangadhi,Landed
+Sita Air,8:0:0,8:55:0,STA602,Lukla,Landed
 Buddha Air,8:30:0,8:30:0,BHA352,Bharatpur,----
-Nepal Airlines,8:30:0,8:30:0,RA134,Rumjatar Airport,----
-Buddha Air,9:0:0,9:0:0,BHA552,Simara Airport,----
+Nepal Airlines,8:30:0,8:21:0,RA134,Rumjatar Airport,Landed
+Buddha Air,9:0:0,9:40:0,BHA552,Simara Airport,----
 Shree Airlines,9:0:0,9:0:0,SHA732,Biratnagar,----
-Buddha Air,9:5:0,9:5:0,BHA952,Bhadrapur,----
+Buddha Air,9:5:0,9:30:0,BHA952,Bhadrapur,----
 Buddha Air,9:15:0,9:15:0,BHA502,Janakpur,----
 Yeti Airlines,9:20:0,9:20:0,NYT674,Pokhara,----
 Yeti Airlines,9:35:0,9:35:0,NYT872,Bhairahawa,----
 Buddha Air,9:40:0,9:40:0,BHA852,Bhairahawa,----
-Buddha Air,9:45:0,9:45:0,BHA452,Nepalgunj,----
+Buddha Air,9:45:0,10:30:0,BHA452,Nepalgunj,----
 Shree Airlines,9:45:0,9:45:0,SHA656,Pokhara,----
-Summit Air,9:45:0,9:45:0,SMA304,Lukla,----
-Buddha Air,9:55:0,9:55:0,BHA604,Pokhara,----
+Buddha Air,9:55:0,10:10:0,BHA604,Pokhara,----
 Buddha Air,9:55:0,9:55:0,BHA702,Biratnagar,----
 Yeti Airlines,10:10:0,10:10:0,NYT782,Biratnagar,----
 Yeti Airlines,10:30:0,10:30:0,NYT928,Bhadrapur,----
@@ -33,18 +27,16 @@ Nepal Airlines,10:30:0,10:30:0,RA178,Resunga,----
 Shree Airlines,10:35:0,10:35:0,SHA432,Nepalgunj,----
 Buddha Air,10:40:0,10:40:0,BHA134,Surkhet,----
 Shree Airlines,10:40:0,10:40:0,SHA222,Dhangadhi,----
-Buddha Air,10:45:0,10:45:0,BHA252,Dhangadhi,----
+Buddha Air,10:45:0,11:20:0,BHA252,Dhangadhi,----
 Buddha Air,10:45:0,10:45:0,BHA854,Bhairahawa,----
 Yeti Airlines,11:0:0,11:0:0,NYT676,Pokhara,----
 Shree Airlines,11:5:0,11:5:0,SHA734,Biratnagar,----
 Buddha Air,11:15:0,11:15:0,BHA282,Tumlingtar,----
 Buddha Air,11:20:0,11:20:0,BHA608,Pokhara,----
-Yeti Airlines,11:25:0,11:25:0,NYT672,Pokhara,----
 Buddha Air,11:30:0,11:30:0,BHA554,Simara Airport,----
 Shree Airlines,11:40:0,11:40:0,SHA942,Bhadrapur,----
 Buddha Air,11:50:0,11:50:0,BHA504,Janakpur,----
 Buddha Air,11:50:0,11:50:0,BHA954,Bhadrapur,----
-Summit Air,11:50:0,11:50:0,SMA082,Ramechhap,----
 Buddha Air,12:10:0,12:10:0,BHA610,Pokhara,----
 Buddha Air,12:10:0,12:10:0,BHA704,Biratnagar,----
 Buddha Air,12:15:0,12:15:0,BHA372,Bharatpur,----

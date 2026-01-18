@@ -46,8 +46,10 @@ class FlightData(BaseModel):
     """
     airline: str
     flight_number: str
-    origin: Optional[str] = None  # For arrivals
-    destination: Optional[str] = None  # For departures
+    origin: Optional[str] = None  # IATA code for arrivals
+    destination: Optional[str] = None  # IATA code for departures
+    origin_city: Optional[str] = None  # City name (for auto-discovery)
+    destination_city: Optional[str] = None  # City name (for auto-discovery)
     scheduled_time: Optional[time] = None
     estimated_time: Optional[time] = None
     actual_time: Optional[time] = None
