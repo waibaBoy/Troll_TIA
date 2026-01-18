@@ -241,6 +241,10 @@ def create_driver(headless: bool):
         if headless:
             options.add_argument("--headless=new")
         options.add_argument("--window-size=1400,900")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-popup-blocking")
 
         driver = uc.Chrome(options=options, version_main=None)
         print("Successfully initialized undetected-chromedriver")
@@ -567,9 +571,15 @@ def main():
     out_dir = (script_dir / args.out_dir).resolve()
 
     driver = create_driver(headless=not args.headed)
+    time.sleep(3)  # Allow driver to stabilize
     try:
         print(f"Loading {URL}...")
-        driver.get(URL)
+        try:
+            driver.get(URL)
+        except Exception as e:
+            print(f"\n❌ Error loading page: {e}")
+            print("💡 Hint: The browser window may have been closed or crashed. Please try again.")
+            return
 
         if not args.manual:
             verification_success = handle_verification(driver, timeout=30)

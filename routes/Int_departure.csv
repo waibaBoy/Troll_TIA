@@ -1,20 +1,49 @@
 Airlines,Scheduled Time of Departure,Actual Time of Departure,Flight,Destination,Status
-Nepal Airlines,19:15:0,19:15:0,RA217,Delhi,Departed
-Korean Air,19:30:0,19:30:0,KE696,Seoul/Incheon,Departed
-Flydubai,19:40:0,19:40:0,FZ1538,Dubai,Boarding Completed
-Himalaya Airlines,20:5:0,20:5:0,H9559,Dammam,Last Call
-Air India,21:5:0,21:5:0,AI212,Delhi,Security Check
-Air Arabia,21:25:0,21:25:0,G9531,Sharjah,Security Check
-Batik Air,21:35:0,21:35:0,OD181,Kuala Lumpur,Check in
-Himalaya Airlines,21:40:0,21:40:0,H9363,Doha,Check in
-Nepal Airlines,21:45:0,21:45:0,RA239,Doha,Check in
-Himalaya Airlines,22:30:0,22:30:0,H9765,Dubai,Check in
-Cathay Pacific,22:55:0,22:55:0,CX640,Hong Kong,Check in
-Nepal Airlines,23:0:0,23:0:0,RA241,Dammam,Check in
-Singapore Airlines,23:5:0,23:5:0,SQ441,Singapore,Check in
-Nepal Airlines,23:15:0,23:15:0,RA229,Dubai,Check in
-China Southern,23:30:0,23:30:0,CZ3068,Guangzhou,Check in
-Biman Bangladesh,0:15:0,0:15:0,BG372,Dhaka,Delayed
-Kuwait Airways,0:15:0,0:15:0,KU1394,Kuwait,----
+Buddha Air,6:55:0,6:55:0,U4163,Kolkata,Departed
+Air India,6:59:0,6:59:0,AI224,Delhi,Departed
+Jazeera,7:0:0,7:0:0,J91540,Kuwait,Boarding
+Air India,7:27:0,7:27:0,AI216,Delhi,Departed
+Air Arabia,7:40:0,7:40:0,G9537,Sharjah,Boarding
+Bhutan Airlines,8:40:0,8:40:0,B3773,Delhi,Check in
+Druk Air,9:0:0,9:0:0,KB401,Paro,Check in
+Qatar Airways,9:10:0,9:10:0,QR649,Doha,Check in
+Flydubai,9:20:0,9:20:0,FZ1134,Dubai,Check in
+Air India,10:5:0,10:5:0,AI214,Delhi,Check in
+Air Arabia Abu Dhabi,10:10:0,10:10:0,3L044,Abu Dhabi,Check in
+IndiGo AIR,10:50:0,10:50:0,6E1152,Delhi,Check in
+Sichuan Airlines,12:20:0,12:20:0,3U3902,Tianfu,----
+China Southern,12:30:0,12:30:0,CZ6068,Guangzhou,----
+Air China,12:35:0,12:35:0,CA438,Tianfu,----
+Turkish Airlines,12:35:0,12:35:0,TK727,Istanbul,----
+SriLankan Airlines,12:50:0,12:50:0,UL182,Colombo,----
+IndiGo AIR,13:15:0,13:15:0,6E1154,Delhi,----
+Thai Airways,13:30:0,13:30:0,TG320,Bangkok,----
+Nepal Airlines,13:45:0,13:45:0,RA217,Delhi,----
+Himalaya Airlines,13:50:0,13:50:0,H9678,Dhaka,----
+Nepal Airlines,14:0:0,14:0:0,RA201,Mumbai,----
+IndiGo AIR,14:30:0,14:30:0,6E1916,Mumbai,----
+Air India Express,14:30:0,14:30:0,IX0873,Banglore,----
+Air India,14:55:0,14:55:0,AI218,Delhi,----
+Thai AirAsia,15:5:0,15:5:0,FD183,Bangkok,----
+Thai Lion,15:5:0,15:5:0,SL221,Bangkok,----
+IndiGo AIR,17:10:0,17:10:0,6E1156,Delhi,----
+Air India,17:30:0,17:30:0,AI220,Delhi,----
+Qatar Airways,17:40:0,17:40:0,QR647,Doha,----
+Biman Bangladesh,18:30:0,18:30:0,BG372,Dhaka,----
+Qatar Airways,19:5:0,19:5:0,QR645,Doha,----
+Flydubai,19:40:0,19:40:0,FZ1538,Dubai,----
+Himalaya Airlines,20:5:0,20:5:0,H9559,Dammam,----
+Air India,21:5:0,21:5:0,AI212,Delhi,----
+Air Arabia,21:5:0,21:5:0,G9531,Sharjah,----
+Batik Air,21:25:0,21:25:0,OD181,Kuala Lumpur,----
+Himalaya Airlines,21:40:0,21:40:0,H9363,Doha,----
+Biman Bangladesh,21:45:0,21:45:0,BG374,Dhaka,----
+Nepal Airlines,22:20:0,22:20:0,RA415,Kuala Lumpur,----
+Malaysia Airlines,22:30:0,22:30:0,MH115,Kuala Lumpur,----
+Cathay Pacific,22:55:0,22:55:0,CX640,Hong Kong,----
+Singapore Airlines,23:5:0,23:5:0,SQ441,Singapore,----
+Nepal Airlines,23:15:0,23:15:0,RA229,Dubai,----
+China Southern,23:30:0,23:30:0,CZ3068,Guangzhou,----
+Nepal Airlines,23:30:0,23:30:0,RA433,Narita,----
 Thai Airways,0:25:0,0:25:0,TG310,Bangkok,----
 Flydubai,0:30:0,0:30:0,FZ574,Dubai,----
