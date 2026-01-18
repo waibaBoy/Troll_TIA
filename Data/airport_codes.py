@@ -32,9 +32,24 @@ CITY_TO_IATA = {
     "Narita": "NRT",
     "Kuwait": "KWI",
     "Dammam": "DMM",
-    "Seoul/Incheon": "ICN",
-    "Incheon": "ICN",
     "Seoul": "ICN",
+
+    # New findings
+    "Paro": "PBH",
+    "Abu Dhabi": "AUH",
+    "Kolkata": "CCU",
+    "Istanbul": "IST",
+    "Tianfu": "TFU",
+    "Chengdu": "TFU",
+    "Colombo": "CMB",
+    "Mumbai": "BOM",
+    "Banglore": "BLR",
+    "Bangalore": "BLR",
+    "Mountain Flight": "MTN",
+    "Lukla": "LUA",
+    "Bharatpur": "BHR",
+    "Rumjatar": "RUM",
+    "Rumjatar Airport": "RUM",
 }
 
 
